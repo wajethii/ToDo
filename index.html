@@ -8,58 +8,168 @@
     <link href="styles/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white shadow-xl rounded-2xl p-8 max-w-2xl w-full">
-        <h1 class="text-4xl font-bold text-center mb-6 text-gray-800">Task Manager</h1>
+<body class="bg-gray-100 min-h-screen relative overflow-hidden font-sans">
+    
+    <div id="overlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-40 hidden md:hidden"></div>
 
-        <!-- Navigation -->
-        <div class="flex flex-col md:flex-row md:justify-between mb-6 border-b pb-4">
-            <div class="flex  flex-wrap justify-center md:space-x-2 space-y-2 md:space-y-0 mb-4 md:mb-0">
-                <button id="all-tasks" class="nav-btn active px-4 py-2 rounded-lg font-medium transition-colors">
-                    <i class="fas fa-list mr-2"></i>All Tasks
-                </button>
-                <button id="active-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors">
-                    <i class="fas fa-spinner mr-2"></i>Active
-                </button>
-                <button id="completed-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors">
-                    <i class="fas fa-check-circle mr-2"></i>Completed
-                </button>
-                <button id="deleted-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors">
-                    <i class="fas fa-trash mr-2"></i>Deleted
-                </button>
-            </div>
-            <div class="flex items-center text-sm text-gray-500">
-                <i class="fas fa-thumbtack text-blue-500 mr-1"></i>
-                <span id="pinned-count">0</span> pinned
-            </div>
-        </div>
-
-        <!-- Form for creating new tasks -->
-        <form id="task-form" class="flex mb-6 space-x-2">
-            <input type="text" id="task-input" placeholder="Add a new task..."
-                   class="flex-grow p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button type="submit"
-                    class="bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md">
-                <i class="fas fa-plus mr-2"></i>Add Task
+    <div id="mobile-nav" class="fixed top-0 left-0 h-full w-64 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden shadow-xl">
+        <div class="p-4 flex justify-end">
+            <button id="close-mobile-nav" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times text-2xl"></i>
             </button>
-        </form>
-
-        <!-- Task list -->
-        <ul id="task-list" class="space-y-4">
-            <!-- Tasks will be dynamically inserted here -->
-        </ul>
-        
-        <!-- Empty state -->
-        <div id="empty-state" class="text-center py-12 hidden">
-            <div class="text-5xl mb-4 text-gray-300">
-                <i class="fas fa-clipboard-list"></i>
-            </div>
-            <h3 class="text-xl font-medium text-gray-500">No tasks found</h3>
-            <p class="text-gray-400 mt-2">Create your first task to get started</p>
+        </div>
+        <div class="flex flex-col p-4 space-y-2">
+            <button id="all-tasks" class="nav-btn active px-4 py-2 rounded-lg font-medium transition-colors text-left w-full">
+                <i class="fas fa-list mr-2"></i>All Tasks
+            </button>
+            <button id="active-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors text-left w-full">
+                <i class="fas fa-spinner mr-2"></i>Active
+            </button>
+            <button id="completed-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors text-left w-full">
+                <i class="fas fa-check-circle mr-2"></i>Completed
+            </button>
+            <button id="deleted-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors text-left w-full">
+                <i class="fas fa-trash mr-2"></i>Deleted
+            </button>
         </div>
     </div>
+    
+    <div class="flex flex-col items-center justify-center p-4">
+        <div class="bg-white shadow-xl rounded-2xl p-8 max-w-2xl w-full">
+            <div class="flex items-center justify-between mb-6">
+                <button id="open-mobile-nav" class="text-gray-500 hover:text-gray-700 md:hidden">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+                <h1 class="text-2xl sm:text-4xl font-bold text-gray-800 text-center flex-grow md:text-left">Task Manager</h1>
+                <div class="text-sm text-gray-500 flex items-center md:hidden">
+                    <i class="fas fa-thumbtack text-blue-500 mr-1"></i>
+                    <span id="pinned-count">0</span> pinned
+                </div>
+            </div>
 
+            <div class="hidden md:flex justify-center mb-6 border-b pb-4">
+                <div class="flex flex-wrap justify-center space-x-2">
+                    <button id="all-tasks" class="nav-btn active px-4 py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-list mr-2"></i>All Tasks
+                    </button>
+                    <button id="active-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-spinner mr-2"></i>Active
+                    </button>
+                    <button id="completed-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-check-circle mr-2"></i>Completed
+                    </button>
+                    <button id="deleted-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-trash mr-2"></i>Deleted
+                    </button>
+                </div>
+                <div class="absolute right-8 text-sm text-gray-500 flex items-center hidden md:flex">
+                    <i class="fas fa-thumbtack text-blue-500 mr-1"></i>
+                    <span id="pinned-count">0</span> pinned
+                </div>
+            </div>
+
+            <form id="task-form" class="flex flex-col sm:flex-row mb-6 space-y-2 sm:space-y-0 sm:space-x-2">
+                <input type="text" id="task-input" placeholder="Add a new task..."
+                       class="flex-grow p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submit"
+                        class="bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md">
+                    <i class="fas fa-plus mr-2 sm:mr-0"></i><span class="sm:inline hidden">Add Task</span>
+                </button>
+            </form>
+
+            <ul id="task-list" class="space-y-4">
+                </ul>
+            
+            <div id="empty-state" class="text-center py-12 hidden">
+                <div class="text-5xl mb-4 text-gray-300">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3 class="text-xl font-medium text-gray-500">No tasks found</h3>
+                <p class="text-gray-400 mt-2">Create your first task to get started</p>
+            </div>
+        </div>
+    </div>
     <script src="scripts/app.js"></script>
+    
+    <script>
+        // Off-canvas menu logic
+        const mobileNav = document.getElementById('mobile-nav');
+        const openBtn = document.getElementById('open-mobile-nav');
+        const closeBtn = document.getElementById('close-mobile-nav');
+        const overlay = document.getElementById('overlay');
+    
+        function openNav() {
+            mobileNav.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+    
+        function closeNav() {
+            mobileNav.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+    
+        openBtn.addEventListener('click', openNav);
+        closeBtn.addEventListener('click', closeNav);
+        overlay.addEventListener('click', closeNav);
 
+        // Task filtering logic
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const taskList = document.getElementById('task-list');
+
+        // Sample tasks array
+        const tasks = [
+            { id: 1, text: 'Buy groceries', status: 'active' },
+            { id: 2, text: 'Finish project report', status: 'active' },
+            { id: 3, text: 'Call a friend', status: 'completed' },
+            { id: 4, text: 'Read a book', status: 'completed' },
+            { id: 5, text: 'Clean the garage', status: 'deleted' },
+        ];
+
+        function renderTasks(filter = 'all') {
+            taskList.innerHTML = ''; // Clear current tasks
+
+            let filteredTasks = tasks;
+            if (filter !== 'all') {
+                filteredTasks = tasks.filter(task => task.status === filter);
+            }
+
+            if (filteredTasks.length === 0) {
+                document.getElementById('empty-state').classList.remove('hidden');
+            } else {
+                document.getElementById('empty-state').classList.add('hidden');
+                filteredTasks.forEach(task => {
+                    const li = document.createElement('li');
+                    li.textContent = task.text;
+                    // Add more styling and buttons here as needed
+                    li.className = 'bg-gray-50 p-4 rounded-lg shadow-sm';
+                    taskList.appendChild(li);
+                });
+            }
+        }
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                // Remove 'active' class from all buttons
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                // Add 'active' class to the clicked button
+                e.currentTarget.classList.add('active');
+
+                // Close mobile nav on click
+                if (window.innerWidth < 768) { // 768px is Tailwind's 'md' breakpoint
+                    closeNav();
+                }
+
+                // Get the filter based on button ID
+                const filter = e.currentTarget.id.replace('-tasks', '');
+                renderTasks(filter);
+            });
+        });
+
+        // Initial render on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTasks('all');
+        });
+
+    </script>
 </body>
 </html>
