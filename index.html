@@ -10,7 +10,7 @@
 </head>
 <body class="bg-gray-100 min-h-screen relative overflow-hidden font-sans">
     
-    <div id="overlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-40 hidden md:hidden"></div>
+     <div id="overlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-40 hidden md:hidden"></div>
 
     <div id="mobile-nav" class="fixed top-0 left-0 h-full w-64 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden shadow-xl">
         <div class="p-4 flex justify-end">
@@ -68,6 +68,7 @@
                 </div>
             </div>
 
+
             <form id="task-form" class="flex flex-col sm:flex-row mb-6 space-y-2 sm:space-y-0 sm:space-x-2">
                 <input type="text" id="task-input" placeholder="Add a new task..."
                        class="flex-grow p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -90,86 +91,5 @@
         </div>
     </div>
     <script src="scripts/app.js"></script>
-    
-    <script>
-        // Off-canvas menu logic
-        const mobileNav = document.getElementById('mobile-nav');
-        const openBtn = document.getElementById('open-mobile-nav');
-        const closeBtn = document.getElementById('close-mobile-nav');
-        const overlay = document.getElementById('overlay');
-    
-        function openNav() {
-            mobileNav.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-        }
-    
-        function closeNav() {
-            mobileNav.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-        }
-    
-        openBtn.addEventListener('click', openNav);
-        closeBtn.addEventListener('click', closeNav);
-        overlay.addEventListener('click', closeNav);
-
-        // Task filtering logic
-        const navButtons = document.querySelectorAll('.nav-btn');
-        const taskList = document.getElementById('task-list');
-
-        // Sample tasks array
-        const tasks = [
-            { id: 1, text: 'Buy groceries', status: 'active' },
-            { id: 2, text: 'Finish project report', status: 'active' },
-            { id: 3, text: 'Call a friend', status: 'completed' },
-            { id: 4, text: 'Read a book', status: 'completed' },
-            { id: 5, text: 'Clean the garage', status: 'deleted' },
-        ];
-
-        function renderTasks(filter = 'all') {
-            taskList.innerHTML = ''; // Clear current tasks
-
-            let filteredTasks = tasks;
-            if (filter !== 'all') {
-                filteredTasks = tasks.filter(task => task.status === filter);
-            }
-
-            if (filteredTasks.length === 0) {
-                document.getElementById('empty-state').classList.remove('hidden');
-            } else {
-                document.getElementById('empty-state').classList.add('hidden');
-                filteredTasks.forEach(task => {
-                    const li = document.createElement('li');
-                    li.textContent = task.text;
-                    // Add more styling and buttons here as needed
-                    li.className = 'bg-gray-50 p-4 rounded-lg shadow-sm';
-                    taskList.appendChild(li);
-                });
-            }
-        }
-
-        navButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                // Remove 'active' class from all buttons
-                navButtons.forEach(btn => btn.classList.remove('active'));
-                // Add 'active' class to the clicked button
-                e.currentTarget.classList.add('active');
-
-                // Close mobile nav on click
-                if (window.innerWidth < 768) { // 768px is Tailwind's 'md' breakpoint
-                    closeNav();
-                }
-
-                // Get the filter based on button ID
-                const filter = e.currentTarget.id.replace('-tasks', '');
-                renderTasks(filter);
-            });
-        });
-
-        // Initial render on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            renderTasks('all');
-        });
-
-    </script>
 </body>
 </html>

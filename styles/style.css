@@ -36,3 +36,7 @@
             opacity: 0.5;
             background-color: #fef2f2;
         }
+        .nav-btn.active {
+    background-color: #3b82f6;
+    color: white;
+}
