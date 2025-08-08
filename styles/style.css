@@ -1,0 +1,38 @@
+ .task-item {
+            transition: all 0.3s ease;
+        }
+        .pinned-task {
+            border-left: 4px solid #3b82f6;
+            background-color: #f0f9ff;
+        }
+        .completed-task {
+            opacity: 0.7;
+            background-color: #f0fdf4;
+        }
+        .completed-task .task-title {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+        .action-btn {
+            transition: all 0.2s ease;
+            opacity: 0.7;
+        }
+        .action-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .nav-btn.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .task-date {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        .edit-input:focus {
+            outline: 2px solid #3b82f6;
+        }
+        .deleted-task {
+            opacity: 0.5;
+            background-color: #fef2f2;
+        }

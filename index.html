@@ -3,39 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
-    <!-- Tailwind CSS for modern styling -->
+    <title>Enhanced Task Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom styles for the editing state */
-        .editing {
-            @apply flex justify-between items-center w-full;
-        }
-
-        .editing .task-title {
-            @apply hidden;
-        }
-
-        .editing .task-actions {
-            @apply hidden;
-        }
-        
-        .editing .edit-input {
-            @apply flex-grow mr-2 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500;
-        }
-
-        .editing .save-btn {
-            @apply bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition-colors duration-200;
-        }
-
-        .task-item.editing .view-mode-controls {
-            @apply hidden;
-        }
-    </style>
+    <link href="styles/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white shadow-xl rounded-2xl p-8 max-w-lg w-full">
+    <div class="bg-white shadow-xl rounded-2xl p-8 max-w-2xl w-full">
         <h1 class="text-4xl font-bold text-center mb-6 text-gray-800">Task Manager</h1>
+
+        <!-- Navigation -->
+        <div class="flex flex-col md:flex-row md:justify-between mb-6 border-b pb-4">
+            <div class="flex  flex-wrap justify-center md:space-x-2 space-y-2 md:space-y-0 mb-4 md:mb-0">
+                <button id="all-tasks" class="nav-btn active px-4 py-2 rounded-lg font-medium transition-colors">
+                    <i class="fas fa-list mr-2"></i>All Tasks
+                </button>
+                <button id="active-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors">
+                    <i class="fas fa-spinner mr-2"></i>Active
+                </button>
+                <button id="completed-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors">
+                    <i class="fas fa-check-circle mr-2"></i>Completed
+                </button>
+                <button id="deleted-tasks" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors">
+                    <i class="fas fa-trash mr-2"></i>Deleted
+                </button>
+            </div>
+            <div class="flex items-center text-sm text-gray-500">
+                <i class="fas fa-thumbtack text-blue-500 mr-1"></i>
+                <span id="pinned-count">0</span> pinned
+            </div>
+        </div>
 
         <!-- Form for creating new tasks -->
         <form id="task-form" class="flex mb-6 space-x-2">
@@ -43,7 +40,7 @@
                    class="flex-grow p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <button type="submit"
                     class="bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md">
-                Add Task
+                <i class="fas fa-plus mr-2"></i>Add Task
             </button>
         </form>
 
@@ -51,8 +48,18 @@
         <ul id="task-list" class="space-y-4">
             <!-- Tasks will be dynamically inserted here -->
         </ul>
+        
+        <!-- Empty state -->
+        <div id="empty-state" class="text-center py-12 hidden">
+            <div class="text-5xl mb-4 text-gray-300">
+                <i class="fas fa-clipboard-list"></i>
+            </div>
+            <h3 class="text-xl font-medium text-gray-500">No tasks found</h3>
+            <p class="text-gray-400 mt-2">Create your first task to get started</p>
+        </div>
     </div>
 
     <script src="scripts/app.js"></script>
+
 </body>
 </html>
